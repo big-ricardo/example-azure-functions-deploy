@@ -25,7 +25,7 @@ jobs:
       repo-path: "."
 
   deploy-staging:
-    name: "Deploy to QA"
+    name: "Deploy to DEV"
     needs: build
     uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-deploy-only.yml@main
     with:
