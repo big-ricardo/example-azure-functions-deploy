@@ -1,0 +1,40 @@
+name: Unit Test CI
+run-name: Unit Test by ${{ github.actor }} | ${{ github.ref }}
+
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+      - "release/v*"
+      - "hotfix/*"
+
+env:
+  OUTPUT_PATH: "."
+  NODE_VERSION: ${{ vars.NODE_VERSION }}
+
+jobs:
+  tests-unity:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@v2
+      - name: Setup Node ${{ env.NODE_VERSION }} Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: "Resolve Project Dependencies Using Npm"
+        shell: bash
+        run: |
+          pushd './${{ env.OUTPUT_PATH }}'
+          npm install
+          npm run build --if-present
+
+      - name: "Run tests"
+        shell: bash
+        run: |
+          pushd './${{ env.OUTPUT_PATH }}'
+          npm run test
