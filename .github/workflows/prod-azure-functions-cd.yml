@@ -37,11 +37,12 @@ jobs:
   deploy-production:
     needs: deploy-staging
     name: "Deploy to PROD"
-    uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-deploy-only.yml@main
+    uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-deploy-matrix.yml@main
     with:
       artifact-name: "${{ github.event.repository.name }}-${{ github.run_id }}"
-      app-name: "functionApp-Luis"
       environment: "prod"
+      is-matrix: true
+      matrix: ${{ vars.PROD_FUNCTION_TARGET }}
     secrets: inherit
 
   create-pr:
