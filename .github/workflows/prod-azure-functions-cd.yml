@@ -20,7 +20,7 @@ env:
 jobs:
   build:
     name: "Build Using"
-    uses: Tech4humans-teste-Luis/CI-CD/.github/workflows/azure-functions-build.yml@main
+    uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-build.yml@main
     with:
       node-version: ${{ vars.NODE_VERSION }}
       repo-path: "."
@@ -28,7 +28,7 @@ jobs:
   deploy-staging:
     name: "Deploy to QA"
     needs: build
-    uses: Tech4humans-teste-Luis/CI-CD/.github/workflows/azure-functions-deploy-only.yml@main
+    uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-deploy-only.yml@main
     with:
       artifact-name: "${{ github.event.repository.name }}-${{ github.run_id }}"
       app-name: "functionApp-Luis"
@@ -38,12 +38,11 @@ jobs:
   deploy-production:
     needs: deploy-staging
     name: "Deploy to PROD"
-    uses: Tech4humans-teste-Luis/CI-CD/.github/workflows/azure-functions-deploy-matrix.yml@main
+    uses: big-ricardo/esteiras-reutilizaveis/.github/workflows/azure-functions-deploy-only.yml@main
     with:
       artifact-name: "${{ github.event.repository.name }}-${{ github.run_id }}"
+      app-name: "functionApp-Luis"
       environment: "prod"
-      is-matrix: true
-      matrix: ${{ vars.PROD_FUNCTION_TARGET }}
     secrets: inherit
 
   create-pr:
